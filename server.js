@@ -1,20 +1,37 @@
 var net = require('net');
-var server = net.createServer();
-
 
 var ADDRESS = '10.62.0.46';
 var PORT = 8000;
 var STUDENT_ID = 13319802;
 
 
+var server = net.createServer()
+	
 
-server.on('connection', function(socket) { 
 
-		console.log('Connection successful\n CONNECTED: ' + socket.remoteAddress + ':' + socket.remotePort );
+server.on('connection', function(socket) {
 
-		socket.on('data', function(data) { 
+		socket.write('Connection successful\n' + socket.remoteAddress + ':' + socket.remotePort + ' has connected');
 
-			console.log('Data: ' + data);
+		socket.on('data', function(data) {
+			
+			if(data.includes("HELO")) {
+
+				socket.write(data 
+					+ "IP:" + ADDRESS + '\n'
+					+ 'PORT: ' + PORT + '\n'
+					+ 'StudentID: ' + STUDENT_ID + '\n');
+			}
+
+			else if(data.includes("KILL_SERVICE\n")) {
+
+				socket.destroy();
+			}
+
+			else {
+
+				console.log('Data: ' + data);
+			}
 		});
 
 		socket.on('close', function() {
@@ -23,10 +40,11 @@ server.on('connection', function(socket) {
 			server.close();
 		});
 
+		socket.on('error', function(err) {
 
-		
+			console.log('An error has occured. \nDetails: ' + err.message);
+		})
+
 });
 
-server.listen(PORT, ADDRESS, function() {
-		console.log('listening on ' + ADDRESS + ':' + PORT);
-});
+server.listen(PORT, '10.62.0.46');
