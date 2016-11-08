@@ -14,8 +14,10 @@ server.on('connection', function(socket) {
 		console.log('Connection successful\n' + socket.remoteAddress + ':' + socket.remotePort + ' has connected');
 
 		socket.on('data', function(data) {
+
+			var dataStr = data.toString();
 			
-			if(data.includes("HELO")) {
+			if(dataStr.includes("HELO")) {
 
 				socket.write(data 
 					+ "IP:" + ADDRESS + '\n'
@@ -23,7 +25,7 @@ server.on('connection', function(socket) {
 					+ 'StudentID: ' + STUDENT_ID + '\n');
 			}
 
-			else if(data.includes("KILL_SERVICE\n")) {
+			else if(dataStr.includes("KILL_SERVICE\n")) {
 
 				socket.destroy();
 			}
@@ -47,7 +49,7 @@ server.on('connection', function(socket) {
 
 });
 
-server.listen(PORT, ADDRESS, function() {
+server.listen(PORT, function() {
 
-	console.log('Listening to port %s %j', PORT, server.address());
+	console.log('Listening to ' + server.address().address + ':' + PORT);
 });
