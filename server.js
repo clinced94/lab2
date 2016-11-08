@@ -11,7 +11,7 @@ var server = net.createServer()
 
 server.on('connection', function(socket) {
 
-		socket.write('Connection successful\n' + socket.remoteAddress + ':' + socket.remotePort + ' has connected');
+		console.log('Connection successful\n' + socket.remoteAddress + ':' + socket.remotePort + ' has connected');
 
 		socket.on('data', function(data) {
 			
@@ -47,4 +47,7 @@ server.on('connection', function(socket) {
 
 });
 
-server.listen(PORT, '10.62.0.46');
+server.listen(PORT, ADDRESS, function() {
+
+	console.log('Listening to port %s %j', PORT, server.address());
+});
