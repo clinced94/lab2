@@ -15,24 +15,19 @@ server.on('connection', function(socket) {
 
 		socket.on('data', function(data) {
 
-			var dataStr = data.toString();
-			
-			if(dataStr.includes("HELO")) {
-
-				socket.write(data 
-					+ "IP:" + ADDRESS + '\n'
-					+ 'PORT: ' + PORT + '\n'
-					+ 'StudentID: ' + STUDENT_ID + '\n');
-			}
-
-			else if(dataStr.includes("KILL_SERVICE\n")) {
+			if(data === "KILL_SERVICE\n") {
 
 				socket.destroy();
 			}
 
 			else {
 
-				console.log('Data: ' + data);
+				console.log('Received data: ' + data);
+				socket.write(data
+                                        + 'IP:' + ADDRESS + '\n'
+                                        + 'Port:' + PORT + '\n'
+                                        + 'StudentID:' + STUDENT_ID + '\n');
+
 			}
 		});
 
@@ -49,7 +44,7 @@ server.on('connection', function(socket) {
 
 });
 
-server.listen(PORT, function() {
+server.listen(PORT, ADDRESS, function() {
 
 	console.log('Listening to ' + server.address().address + ':' + PORT);
 });
