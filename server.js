@@ -19,7 +19,7 @@ var server = net.createServer()
 server.on('connection', function(socket) {
 
 		var socketAddress = socket.remoteAddress + ":" + socket.remotePort;
-		console.log('Connection successful\n' + socketAddress + " has connected";
+		console.log('Connection successful\n' + socketAddress + " has connected");
 
 		socket.on('data', function(data) {
 
@@ -57,6 +57,10 @@ server.on('connection', function(socket) {
 
 server.on("close", function() {
 	console.log("Server is now closed");
+});
+
+server.on("error", function(err) {
+	console.log("Error occurred\n Details: " + err.message);
 });
 
 server.listen(PORT, ADDRESS, function() {
