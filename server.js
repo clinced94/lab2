@@ -1,8 +1,15 @@
 var net = require('net');
 
 var ADDRESS = '10.62.0.46';
-var PORT = 8000;
 var STUDENT_ID = 13319802;
+var PORT;
+if(process.argv[2]) {
+	PORT = process.argv[2];
+}
+else {
+	console.log("No port entered ... using default port 8000");
+	PORT = 8000;
+}
 
 
 var server = net.createServer()
@@ -11,7 +18,8 @@ var server = net.createServer()
 
 server.on('connection', function(socket) {
 
-		console.log('Connection successful\n' + socket.remoteAddress + ':' + socket.remotePort + ' has connected');
+		var socketAddress = socket.remoteAddress + ":" + socket.remotePort;
+		console.log('Connection successful\n' + socketAddress + " has connected";
 
 		socket.on('data', function(data) {
 
@@ -28,12 +36,14 @@ server.on('connection', function(socket) {
                                         + 'Port:' + PORT + '\n'
                                         + 'StudentID:' + STUDENT_ID + '\n');
 
+				socket.end();
+
 			}
 		});
 
 		socket.on('close', function() {
 
-			console.log('Connection closed with ' + socket.remoteAddress + ':' + socket.remotePort);
+			console.log('Connection closed with ' + socketAddress);
 			server.close();
 		});
 
@@ -42,6 +52,11 @@ server.on('connection', function(socket) {
 			console.log('An error has occured. \nDetails: ' + err.message);
 		})
 
+});
+
+
+server.on("close", function() {
+	console.log("Server is now closed");
 });
 
 server.listen(PORT, ADDRESS, function() {
